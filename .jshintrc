@@ -1,0 +1,23 @@
+{
+    "trailing": true,
+    "indent": 4,
+    "quotmark": "single",
+    "node": true,
+    "browser": true,
+    "white": true,
+    "newcap": true,
+    "undef": true,
+    "jquery": true,
+    "unused": true,
+    "nonstandard": true,
+    "maxdepth": 3,
+    "globals"   : {
+        /* MOCHA */
+        "describe"   : false,
+        "it"         : false,
+        "before"     : false,
+        "beforeEach" : false,
+        "after"      : false,
+        "afterEach"  : false
+    }
+}
