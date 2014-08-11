@@ -1,0 +1,18 @@
+{
+  "name": "redis-test",
+  "version": "0.0.1",
+  "description": "Redis client test project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/florianschwarz/redis-test.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/florianschwarz/redis-test/issues"
+  },
+  "homepage": "https://github.com/florianschwarz/redis-test"
+}
