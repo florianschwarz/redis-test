@@ -51,4 +51,24 @@ describe('Redis tests', function () {
         ]);
     });
 
+    it('Set and get new key', function (done) {
+        client.set('my key 412', 'string val less than 512M', 'NX', function (err, reply) {
+            assert.notOk(err);
+            assert.equal(reply, 'OK');
+            client.get('my key 412', function (err, reply) {
+                assert.notOk(err);
+                assert.equal(reply, 'string val less than 512M');
+                done();
+            });
+        });
+    });
+
+    it('Set non existing key only if key exists', function (done) {
+        client.set('my key 123123', 'some value', 'XX', function (err, reply) {
+            assert.notOk(err);
+            assert.notOk(reply);
+            done();
+        });
+    });
+
 });
