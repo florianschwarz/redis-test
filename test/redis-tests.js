@@ -150,4 +150,29 @@ describe('Redis tests', function () {
         ]);
     });
 
+    it('Store and get object as JSON', function (done) {
+        var user = {
+            id: 321,
+            name: 'peter',
+            description: 'peter desc'
+        };
+        async.series([
+            function (cb) {
+                client.set('user:321', JSON.stringify(user), cb);
+            },
+            function () {
+                client.get('user:321', function (err, userJsonString) {
+                    assert.notOk(err);
+                    assert.ok(userJsonString);
+
+                    var user2 = JSON.parse(userJsonString);
+                    assert.equal(user2.id, 321);
+                    assert.equal(user2.name, 'peter');
+                    assert.equal(user2.description, 'peter desc');
+                    done();
+                });
+            }
+        ]);
+    });
+
 });
