@@ -32,14 +32,12 @@ describe('Redis tests', function () {
     });
 
     it('Set hash field and get hash keys', function (done) {
-        assert.ok(true);
-
         async.series([
             function (cb) {
                 client.hset('hash key', 'hashtest 1', 'some value', cb);
             },
             function (cb) {
-                client.hset(['hash key', 'hashtest 2', 'some other value'], cb);
+                client.hset('hash key', 'hashtest 2', 'some other value', cb);
             },
             function () {
                 client.hkeys('hash key', function (err, replies) {
@@ -69,6 +67,87 @@ describe('Redis tests', function () {
             assert.notOk(reply);
             done();
         });
+    });
+
+    it('Incr value', function (done) {
+        async.series([
+            function (cb) {
+                client.set('incr test', '6', cb);
+            },
+            function (cb) {
+                client.incr('incr test', cb);
+            },
+            function () {
+                client.get('incr test', function (err, reply) {
+                    assert.notOk(err);
+                    assert.equal(reply, '7');
+                    done();
+                });
+            }
+        ]);
+    });
+
+    it('Incr and decrease value', function (done) {
+        async.series([
+            function (cb) {
+                client.set('incr test2', 6, cb);
+            },
+            function (cb) {
+                client.incrby('incr test2', 56, cb);
+            },
+            function (cb) {
+                client.decrby('incr test2', 2, cb);
+            },
+            function () {
+                client.incr('incr test2', function (err, reply) {
+                    assert.notOk(err);
+                    assert.equal(reply, 61);
+                    done();
+                });
+            }
+        ]);
+    });
+
+    it('mset and mget', function (done) {
+        async.series([
+            function (cb) {
+                client.mset('a1', 'a1 value', 'a2', 'a2 value', cb);
+            },
+            function () {
+                client.mget('a1', 'a2', 'a3', function (err, replies) {
+                    assert.notOk(err);
+                    assert.equal(replies[0], 'a1 value');
+                    assert.equal(replies[1], 'a2 value');
+                    assert.notOk(replies[2]);
+                    done();
+                });
+            }
+        ]);
+    });
+
+    it('Exists and delete', function (done) {
+        async.series([
+            function (cb) {
+                client.set('Exists and delete', 6, cb);
+            },
+            function (cb) {
+                client.exists('Exists and delete', function (err, reply) {
+                    assert.notOk(err);
+                    assert.ok(reply);
+                    cb();
+                });
+            },
+            function (cb) {
+                client.del('Exists and delete', cb);
+            },
+            function () {
+                client.exists('Exists and delete', function (err, reply) {
+                    assert.notOk(err);
+                    assert.notOk(reply);
+                    done();
+                });
+            }
+        ]);
     });
 
 });
